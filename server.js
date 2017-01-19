@@ -19,9 +19,7 @@ app.listen(PORT, function() {
 });
 
 // Requires and sets the HTML routes in this file
-var htmlRoutes = require('./app/routing/htmlRoutes.js');
-app.use('/', htmlRoutes);
+require('./app/routing/htmlRoutes.js')(app);
 
 // Requires and sets the API routes in this file
-var apiRoutes = require('./app/routing/apiRoutes.js');
-app.use('/', apiRoutes);
+require('./app/routing/apiRoutes.js')(app);
