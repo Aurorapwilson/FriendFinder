@@ -2,14 +2,48 @@
 var friends = require('../data/friends.js');
 
 // Export the function
-modules.exports = function(app) {
-	// Sets the get for the api/friends route
-	app.get('/api/friends', function(req, res) {
-	    res.json(friends);
-	});
+module.exports = function(app) {
 
-	// Set the post for the api/friends route
-	app.post('/api/friends', function(req, res) {
-	    friends.push(req.body);
-	});
+    // Sets the get for the api/friends route
+    app.get('/api/friends', function(req, res) {
+        res.json(friends);
+    });
+
+    // Set the post for the api/friends route
+    app.post('/api/friends', function(req, res) {
+        var difference = 40;
+        var matchName = '';
+        var matchPhoto = '';
+
+
+        friends.forEach(function(friend) {
+            var matchedScoresArray = [];
+            var totalDifference = 40;
+
+            function add(total, num) {
+                return total + num;
+            }
+
+            for (var i = 0; i < friend.scores.length; i++) {
+                matchedScoresArray.push(Math.abs(parseInt(req.body.scores[i]) - parseInt(friend.scores[i])));
+
+            }
+
+            totalDifference = matchedScoresArray.reduce(add, 0);
+
+            if (totalDifference < difference) {
+                difference = totalDifference;
+                matchName = friend.name;
+                matchPhoto = friend.photo;
+            }
+        });
+
+        res.json({
+            name: matchName,
+            photo: matchPhoto
+        });
+
+
+        friends.push(req.body);
+    });
 }
